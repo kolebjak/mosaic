@@ -1,30 +1,15 @@
 import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import '../../index.css';
-import { Routes } from '../routes';
+import {Routes} from '../routes';
+import Home from '../home/Home';
 
-type State = {
-  open: boolean;
-};
-
-type Props = {};
-
-class App extends React.Component<Props, State> {
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {open: false};
-  }
-
-  render() {
-    return (
-      <div>
-        <Switch>
-          <Route exact={true} path={Routes.home} component={() => <div>Hello.</div>} />
-        </Switch>
-      </div>
-    );
-  }
-}
-
-export default App;
+export default () => (
+  <div>
+    <Switch>
+      <Route exact={true} path={Routes.home} component={Home}/>
+      <Route path={Routes.selectImage} component={() => <div>Select image</div>}/>
+      <Route path={Routes.upload} component={() => <div>Upload</div>}/>
+    </Switch>
+  </div>
+);
