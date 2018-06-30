@@ -8,7 +8,6 @@ export type Props = {
 };
 
 class UploadPage extends React.Component<Props> {
-  private canvas: HTMLCanvasElement | null;
 
   onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,11 +22,6 @@ class UploadPage extends React.Component<Props> {
         <form onSubmit={this.onSubmit}>
           <input type="file" accept="image/png, image/jpeg" name="image"/>
           <button type="submit">Upload</button>
-          <canvas
-            height={200}
-            width={200}
-            ref={(canvas) => this.canvas = canvas}
-          />
         </form>
       </div>
     );

@@ -7,3 +7,16 @@ export type State = {
   uploadReducer: UploadReducer,
   previewReducer: PreviewReducer,
 };
+
+export type OriginalImage = {
+  source: string,
+  file: File,
+};
+
+export type Rgb = {
+  red: number;
+  green: number;
+  blue: number;
+};
+
+export type Mosaic = Array<Array<Rgb>>;

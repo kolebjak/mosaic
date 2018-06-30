@@ -6,13 +6,15 @@ import { readAsDataURL } from './utils';
 import { setOriginalImageAction } from '../preview/actions';
 import { push } from 'react-router-redux';
 import { Routes } from '../routes';
+import { OriginalImage } from '../../types';
 
 function* uploadImage(action: UploadImageActionResponse): SagaIterator {
   try {
     const { image } = action;
     const result = yield call(readAsDataURL, image);
     if (result) {
-      yield put(setOriginalImageAction(result));
+      const originalImage: OriginalImage = { source: result, file: image };
+      yield put(setOriginalImageAction(originalImage));
       yield put(push(Routes.preview));
     }
   } catch (e) {

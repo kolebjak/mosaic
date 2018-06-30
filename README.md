@@ -9,3 +9,4 @@
 
 ## ​Areas​ ​for​ ​improvement 
 * Loaders / spinners if something takes long
+* Resizing image
