@@ -1,9 +1,9 @@
 import { fork } from 'redux-saga/effects';
-import mySaga from './modules/mySaga';
+import uploadSaga from './modules/upload/saga';
 
 export default () => function* rootSaga() {
   const sagas = [
-    yield fork(mySaga),
+    yield fork(uploadSaga),
   ];
   yield sagas;
 };
