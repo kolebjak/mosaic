@@ -3,21 +3,17 @@ import { Mosaic } from '../../../types';
 
 export type Props = {
   mosaic: Mosaic,
-  mosaicDimensions: {
-    width: number,
-    height: number,
-  },
 };
 
 const size = 16;
 
-export default ({ mosaic, mosaicDimensions }: Props) => {
+export default ({ mosaic }: Props) => {
   if (!mosaic) {
     return null;
   }
   return (
-    <svg width={mosaicDimensions.width} height={mosaicDimensions.height}>
-      {mosaic.map((mosaicRow, row) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={mosaic.width} height={mosaic.height}>
+      {mosaic.data.map((mosaicRow, row) => (
         mosaicRow.map((mosaicCol, col) => (
           <circle
             key={`${row}${col}`}

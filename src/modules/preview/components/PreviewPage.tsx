@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { connect } from 'react-redux';
-import { selectMosaic, selectMosaicDimensions, selectOriginalImage } from '../reducer';
-import { Mosaic, OriginalImage, State } from '../../../types';
-import { SetMosaicAction, setMosaicAction, SetMosaicDimensionsAction, setMosaicDimensionsAction } from '../actions';
-import MosaicImage from './Mosaic';
+import { selectMosaic, selectOriginalImage } from '../reducer';
+import { OriginalImage, State, Mosaic as MosaicProps } from '../../../types';
+import {
+  GenerateMosaicAction,
+  generateMosaicAction,
+} from '../actions';
+import Mosaic from './Mosaic';
 
 export type Props = {
+  mosaic: MosaicProps,
   originalImage: OriginalImage,
-  mosaic: Mosaic,
-  setMosaic: SetMosaicAction,
-  setMosaicDimensions: SetMosaicDimensionsAction,
-  mosaicDimensions: {
-    width: number,
-    height: number,
-  },
+  generateMosaic: GenerateMosaicAction,
 };
 
 class PreviewPage extends React.Component<Props> {
@@ -31,6 +30,7 @@ class PreviewPage extends React.Component<Props> {
       const context = this.canvas.getContext('2d');
       if (context) {
         const image = new Image();
+        image.crossOrigin = 'Anonymous';
         image.src = imageSrc;
         image.onload = () => {
           if (this.canvas) {
@@ -45,60 +45,36 @@ class PreviewPage extends React.Component<Props> {
 
   generateMosaic = () => {
     if (this.canvas) {
+      const { generateMosaic } = this.props;
+      const { width, height } = this.canvas;
       const context = this.canvas.getContext('2d');
       if (!context) {
         return;
       }
-      const { width, height } = this.canvas;
-      let imageData = context.getImageData(0, 0, width, height);
-      let data = imageData.data;
-      let mosaic: Mosaic = [];
 
-      for (let i = 0; i < data.length; i += 4) {
-
-        const red = data[i];
-        const green = data[i + 1];
-        const blue = data[i + 2];
-        const pixelNumber = i / 4;
-
-        const colNumber = pixelNumber % this.canvas.width;
-        const rowNumber = Math.floor(pixelNumber / this.canvas.width);
-
-        const squareColNumber = Math.floor(colNumber / 16);
-        const squareRowNumber = Math.floor(rowNumber / 16);
-
-        if (!mosaic[squareRowNumber]) {
-          mosaic[squareRowNumber] = [];
-        }
-
-        if (mosaic[squareRowNumber][squareColNumber]) {
-          mosaic[squareRowNumber][squareColNumber].red += red;
-          mosaic[squareRowNumber][squareColNumber].green += green;
-          mosaic[squareRowNumber][squareColNumber].blue += blue;
-        } else {
-          mosaic[squareRowNumber][squareColNumber] = { red, green, blue };
-        }
-
-      }
-
-      this.props.setMosaic(mosaic);
-      this.props.setMosaicDimensions(width, height);
+      const imageData = context.getImageData(0, 0, width, height);
+      generateMosaic(imageData, width, height);
     }
   }
 
   render() {
-    const { originalImage, mosaic, mosaicDimensions } = this.props;
+    const { originalImage, mosaic } = this.props;
+    const base64 = btoa(renderToStaticMarkup(<Mosaic mosaic={mosaic} />));
+    const dataUri = `data:image/svg+xml;base64,${base64}`;
+
     if (originalImage) {
       return (
         <div>
-          <MosaicImage
-            mosaic={mosaic}
-            mosaicDimensions={mosaicDimensions}
-          />
-          <canvas
-            ref={(canvas) => this.canvas = canvas}
-          />
-          <button onClick={this.generateMosaic}>Generate Mosaic</button>
+          {mosaic ?
+            <div>
+              <button className="button" onClick={() => console.log(dataUri)}>​Share ​​image ​​to ​​imgur</button>
+              <img src={dataUri}/>
+            </div>  :
+            <div>
+              <button className="button" onClick={this.generateMosaic}>Generate Mosaic</button>
+              <canvas ref={(canvas) => this.canvas = canvas}/>
+            </div>
+          }
         </div>
       );
     } else {
@@ -113,10 +89,8 @@ export default connect(
   (state: State) => ({
     originalImage: selectOriginalImage(state),
     mosaic: selectMosaic(state),
-    mosaicDimensions: selectMosaicDimensions(state),
   }),
   {
-    setMosaic: setMosaicAction,
-    setMosaicDimensions: setMosaicDimensionsAction,
+    generateMosaic: generateMosaicAction,
   }
 )(PreviewPage);

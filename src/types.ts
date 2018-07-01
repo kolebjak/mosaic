@@ -13,10 +13,14 @@ export type OriginalImage = {
   file: File,
 };
 
-export type Rgb = {
+export type MosaicData = Array<Array<{
   red: number;
   green: number;
   blue: number;
-};
+}>>;
 
-export type Mosaic = Array<Array<Rgb>>;
+export type Mosaic = {
+  data: MosaicData,
+  width: number,
+  height: number,
+};

@@ -8,16 +8,17 @@ import PreviewPage from '../preview/components/PreviewPage';
 
 export default () => (
   <div>
-    <div>
-      <Link to={Routes.selectImage}>Select Image</Link><br />
-      <Link to={Routes.upload}>Upload</Link><br />
-      <Link to={Routes.preview}>Preview</Link>
+    <div className="menu">
+      <Link to={Routes.selectImage}>Select Image</Link>
+      <Link to={Routes.upload}>Upload</Link><br/>
     </div>
-    <Switch>
-      <Route exact={true} path={Routes.home} component={HomePage}/>
-      <Route path={Routes.selectImage} component={() => <div>Select image</div>}/>
-      <Route path={Routes.upload} component={UploadPage}/>
-      <Route path={Routes.preview} component={PreviewPage}/>
-    </Switch>
+    <div className="page">
+      <Switch>
+        <Route exact={true} path={Routes.home} component={HomePage}/>
+        <Route path={Routes.selectImage} component={() => <div>Select image</div>}/>
+        <Route path={Routes.upload} component={UploadPage}/>
+        <Route path={Routes.preview} component={PreviewPage}/>
+      </Switch>
+    </div>
   </div>
 );

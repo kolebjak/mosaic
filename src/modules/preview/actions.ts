@@ -1,4 +1,4 @@
-import { SET_ORIGINAL_IMAGE, SET_MOSAIC, SET_MOSAIC_DIMENSIONS } from './constants';
+import { SET_ORIGINAL_IMAGE, SET_MOSAIC, GENERATE_MOSAIC } from './constants';
 import { Mosaic, OriginalImage } from '../../types';
 
 export type SetOriginalImageAction = (originalImage: OriginalImage) => SetOriginalImageActionResponse;
@@ -23,17 +23,19 @@ export const setMosaicAction: SetMosaicAction = (mosaic: Mosaic) => ({
   mosaic,
 });
 
-export type SetMosaicDimensionsAction = (width: number, height: number) => SetMosaicDimensionsActionResponse;
-export type SetMosaicDimensionsActionResponse = {
-  type: SET_MOSAIC_DIMENSIONS,
+export type GenerateMosaicAction = (imageData: ImageData, width: number, height: number) => GenerateMosaicActionResponse;
+export type GenerateMosaicActionResponse = {
+  type: GENERATE_MOSAIC,
+  imageData: ImageData,
   width: number,
   height: number,
 };
 
-export const setMosaicDimensionsAction: SetMosaicDimensionsAction = (width: number, height: number) => ({
-  type: SET_MOSAIC_DIMENSIONS,
+export const generateMosaicAction: GenerateMosaicAction = (imageData: ImageData, width: number, height: number) => ({
+  type: GENERATE_MOSAIC,
+  imageData,
   width,
-  height
+  height,
 });
 
-export type Action = SetOriginalImageActionResponse | SetMosaicActionResponse | SetMosaicDimensionsActionResponse;
+export type Action = SetOriginalImageActionResponse | SetMosaicActionResponse | GenerateMosaicActionResponse;
