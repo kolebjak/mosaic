@@ -1,5 +1,6 @@
 {
   "extends": "./tsconfig.json",
+  "nocheck": [ "TS2001", "TS2012" ],
   "compilerOptions": {
     "module": "commonjs"
   }

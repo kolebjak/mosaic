@@ -6,9 +6,13 @@ export type Props = {
 };
 
 const size = 16;
-
+/**
+ * Component displaying circles with average colors
+ * @param {Mosaic} mosaic
+ * @returns {any}
+ */
 export default ({ mosaic }: Props) => {
-  if (!mosaic) {
+  if (!mosaic || !mosaic.data) {
     return null;
   }
   return (

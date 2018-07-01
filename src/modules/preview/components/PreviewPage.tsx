@@ -15,6 +15,9 @@ export type Props = {
   generateMosaic: GenerateMosaicAction,
 };
 
+/**
+ * Component for displaying Uploaded image / Mosaic
+ */
 class PreviewPage extends React.Component<Props> {
   private canvas: HTMLCanvasElement | null;
 
@@ -25,6 +28,7 @@ class PreviewPage extends React.Component<Props> {
     }
   }
 
+  /** Setting image from source to canvas */
   setImageIntoCanvas = (imageSrc: string) => {
     if (this.canvas) {
       const context = this.canvas.getContext('2d');
@@ -43,6 +47,7 @@ class PreviewPage extends React.Component<Props> {
     }
   }
 
+  /** Call saga with image data to compute data for <Mosaic /> component */
   generateMosaic = () => {
     if (this.canvas) {
       const { generateMosaic } = this.props;
@@ -59,7 +64,10 @@ class PreviewPage extends React.Component<Props> {
 
   render() {
     const { originalImage, mosaic } = this.props;
+
+    /** Convert SVG to base64 */
     const base64 = btoa(renderToStaticMarkup(<Mosaic mosaic={mosaic} />));
+    /** Prepend data information to create uri */
     const dataUri = `data:image/svg+xml;base64,${base64}`;
 
     if (originalImage) {

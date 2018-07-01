@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { uploadImageAction, UploadImageAction } from '../actions';
 
 export type Props = {
-  imageSrc: string,
   uploadImage: UploadImageAction,
 };
 
+/**
+ * Page with simple upload form
+ */
 class UploadPage extends React.Component<Props> {
 
+  /** Call saga on submit with uploaded file */
   onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
