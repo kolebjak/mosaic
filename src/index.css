@@ -24,3 +24,9 @@ body {
   display: block;
   margin-bottom: 20px;
 }
+.galleryImage {
+  cursor: pointer;
+}
+.galleryImage:hover {
+  opacity: 0.7;
+}

@@ -4,6 +4,7 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { History } from 'history';
 import { State } from './types';
 import previewReducer from './modules/preview/reducer';
+import galleryReducer from './modules/gallery/reducer';
 
 // tslint:disable-next-line
 declare const window: any;
@@ -12,6 +13,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer: Reducer<State> = combineReducers({
   routerReducer,
   previewReducer,
+  galleryReducer,
 });
 export default (history: History) => {
   const sagaMiddleware = createSagaMiddleware();

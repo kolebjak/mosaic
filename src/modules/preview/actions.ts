@@ -1,5 +1,5 @@
-import { SET_ORIGINAL_IMAGE, SET_MOSAIC, GENERATE_MOSAIC } from './constants';
-import { Mosaic, OriginalImage } from '../../types';
+import { SET_ORIGINAL_IMAGE, SET_MOSAIC, GENERATE_MOSAIC, SHARE_IMAGE, SET_SHARED_IMAGE } from './constants';
+import { Image, Mosaic, OriginalImage } from '../../types';
 
 export type SetOriginalImageAction = (originalImage: OriginalImage) => SetOriginalImageActionResponse;
 export type SetOriginalImageActionResponse = {
@@ -38,4 +38,26 @@ export const generateMosaicAction: GenerateMosaicAction = (imageData: ImageData,
   height,
 });
 
-export type Action = SetOriginalImageActionResponse | SetMosaicActionResponse | GenerateMosaicActionResponse;
+export type ShareImageAction = (base64Image: string) => ShareImageActionResponse;
+export type ShareImageActionResponse = {
+  type: SHARE_IMAGE,
+  base64Image: string,
+};
+
+export const shareImageAction: ShareImageAction = (base64Image: string) => ({
+  type: SHARE_IMAGE,
+  base64Image,
+});
+
+export type SetSharedImageAction = (sharedImage: Image) => SetSharedImageActionResponse;
+export type SetSharedImageActionResponse = {
+  type: SET_SHARED_IMAGE,
+  sharedImage: Image,
+};
+
+export const setSharedImageAction: SetSharedImageAction = (sharedImage: Image) => ({
+  type: SET_SHARED_IMAGE,
+  sharedImage,
+});
+
+export type Action = SetOriginalImageActionResponse | SetMosaicActionResponse | GenerateMosaicActionResponse | ShareImageActionResponse | SetSharedImageActionResponse;

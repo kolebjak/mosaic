@@ -22,6 +22,7 @@ class UploadPage extends React.Component<Props> {
   render() {
     return (
       <div>
+        <h1>Upload your favourite picture</h1>
         <form onSubmit={this.onSubmit}>
           <input type="file" accept="image/png, image/jpeg" name="image"/>
           <button type="submit">Upload</button>

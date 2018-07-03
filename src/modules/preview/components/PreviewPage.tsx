@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { connect } from 'react-redux';
-import { selectMosaic, selectOriginalImage } from '../reducer';
-import { OriginalImage, State, Mosaic as MosaicProps } from '../../../types';
+import { selectMosaic, selectOriginalImage, selectSharedImage } from '../reducer';
+import { OriginalImage, State, Mosaic as MosaicProps, Image as ImageProps } from '../../../types';
 import {
   GenerateMosaicAction,
   generateMosaicAction,
+  ShareImageAction,
+  shareImageAction,
 } from '../actions';
 import Mosaic from './Mosaic';
 
@@ -13,6 +15,8 @@ export type Props = {
   mosaic: MosaicProps,
   originalImage: OriginalImage,
   generateMosaic: GenerateMosaicAction,
+  shareImage: ShareImageAction,
+  sharedImage: ImageProps,
 };
 
 /**
@@ -63,26 +67,34 @@ class PreviewPage extends React.Component<Props> {
   }
 
   render() {
-    const { originalImage, mosaic } = this.props;
+    const { originalImage, mosaic, shareImage, sharedImage } = this.props;
 
-    /** Convert SVG to base64 */
-    const base64 = btoa(renderToStaticMarkup(<Mosaic mosaic={mosaic} />));
-    /** Prepend data information to create uri */
-    const dataUri = `data:image/svg+xml;base64,${base64}`;
+    let dataUri: string = '';
+    if (mosaic) {
+      /** Convert SVG to base64 */
+      const base64 = btoa(renderToStaticMarkup(<Mosaic mosaic={mosaic}/>));
+      /** Prepend data information to create uri */
+      dataUri = `data:image/svg+xml;base64,${base64}`;
+      /** Set into canvas */
+      this.setImageIntoCanvas(dataUri);
+    }
 
     if (originalImage) {
       return (
         <div>
-          {mosaic ?
-            <div>
-              <button className="button" onClick={() => console.log(dataUri)}>​Share ​​image ​​to ​​imgur</button>
-              <img src={dataUri}/>
-            </div>  :
-            <div>
-              <button className="button" onClick={this.generateMosaic}>Generate Mosaic</button>
-              <canvas ref={(canvas) => this.canvas = canvas}/>
-            </div>
-          }
+          <div>
+            {sharedImage && <div>Shared on Imgur <a href={sharedImage.link}>HERE</a></div>}
+            {dataUri &&
+            <button
+              className="button"
+              onClick={() => console.log(this.canvas ? shareImage(this.canvas.toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '')) : null)}
+            >​
+              Share image ​​to ​​imgur
+            </button>
+            }
+            <button className="button" onClick={this.generateMosaic}>Generate Mosaic</button>
+            <canvas ref={(canvas) => this.canvas = canvas}/>
+          </div>
         </div>
       );
     } else {
@@ -97,8 +109,10 @@ export default connect(
   (state: State) => ({
     originalImage: selectOriginalImage(state),
     mosaic: selectMosaic(state),
+    sharedImage: selectSharedImage(state),
   }),
   {
     generateMosaic: generateMosaicAction,
+    shareImage: shareImageAction,
   }
 )(PreviewPage);

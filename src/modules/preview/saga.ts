@@ -1,8 +1,15 @@
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { GENERATE_MOSAIC } from './constants';
-import { GenerateMosaicActionResponse, setMosaicAction } from './actions';
+import { GENERATE_MOSAIC, SHARE_IMAGE } from './constants';
+import {
+  GenerateMosaicActionResponse,
+  setMosaicAction,
+  setSharedImageAction,
+  ShareImageActionResponse
+} from './actions';
 import { Mosaic, MosaicData } from '../../types';
+import { postImage } from '../fetcher';
+import { isResponseSuccessfull } from '../utils';
 
 function* generateMosaic(action: GenerateMosaicActionResponse): SagaIterator {
   try {
@@ -49,8 +56,20 @@ function* generateMosaic(action: GenerateMosaicActionResponse): SagaIterator {
   }
 }
 
+function* shareImage(action: ShareImageActionResponse): SagaIterator {
+  try {
+    const response = yield call(postImage, action.base64Image);
+    if (isResponseSuccessfull(response)) {
+      yield put(setSharedImageAction(response.data));
+    }
+  } catch (e) {
+    console.error(e.message);
+  }
+}
+
 function* saga(): SagaIterator {
   yield takeLatest(GENERATE_MOSAIC, generateMosaic);
+  yield takeLatest(SHARE_IMAGE, shareImage);
 }
 
 export default saga;

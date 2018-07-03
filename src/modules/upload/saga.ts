@@ -2,7 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 import { UPLOAD_IMAGE } from './constants';
 import { UploadImageActionResponse } from './actions';
-import { readAsDataURL } from './utils';
+import { readAsDataURL } from '../utils';
 import { setOriginalImageAction } from '../preview/actions';
 import { push } from 'react-router-redux';
 import { Routes } from '../routes';
