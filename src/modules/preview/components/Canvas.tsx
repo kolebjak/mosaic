@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { getAverageColor } from '../../utils';
 
 export type Props = {
   imageSrc: string,
-  setCanvasIsLoading: (isLoading: boolean) => void,
-  isLoading: boolean,
-  onGenerate: (imageData: ImageData) => void,
+  setIsLoading: (isLoading: boolean) => void,
   onShare: (dataURL: string) => void,
 };
 
@@ -38,46 +37,78 @@ class Canvas extends React.Component<Props> {
     if (this.canvas) {
       const context = this.canvas.getContext('2d');
       if (context) {
-        this.props.setCanvasIsLoading(true);
+        this.props.setIsLoading(true);
         this.loadImage(imageSrc).then((image: HTMLImageElement) => {
           if (this.canvas) {
             this.canvas.width = image.width;
             this.canvas.height = image.height;
           }
           context.drawImage(image, 0, 0, image.width, image.height);
-          this.props.setCanvasIsLoading(false);
+          this.props.setIsLoading(false);
         });
       }
     }
   }
 
+  setMosaicToCanvas = () => new Promise((resolve) => {
+    if (!this.canvas) {
+      return;
+    }
+
+    const context = this.canvas.getContext('2d');
+    if (!context) {
+      return;
+    }
+
+    const { width, height } = this.canvas;
+
+    let sx = 0;
+    let row = 0;
+    let radius = 16;
+    let imageData = context.getImageData(sx, row * radius, radius, radius);
+
+    while (Math.floor(height / radius) >= row) {
+
+      const avg = getAverageColor(imageData);
+      const clearedSquare = context.createImageData(radius, radius);
+      context.putImageData(clearedSquare, sx, row * radius);
+
+      context.beginPath();
+      context.arc(sx, row * radius, radius / 2, 0, 2 * Math.PI, false);
+      context.fillStyle = avg;
+      context.fill();
+
+      sx += radius;
+      if (sx >= width) {
+        sx = 0;
+        row += 1;
+      }
+      imageData = context.getImageData(sx, row * radius, radius, radius);
+    }
+    resolve();
+  })
+
   share = () => {
     if (this.canvas) {
-      this.props.onShare(this.canvas.toDataURL());
+      const base64Image = this.canvas.toDataURL().replace('data:image/png;base64,', '');
+      this.props.onShare(base64Image);
     }
   }
 
-  generate = () => {
-    if (this.canvas) {
-      console.log('click');
-      const context = this.canvas.getContext('2d');
-      if (context) {
-        const imageData = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        this.props.onGenerate(imageData);
-        console.log('finished');
-      }
-    }
+  generate = async () => {
+    this.props.setIsLoading(true);
+    await this.setMosaicToCanvas();
+    this.props.setIsLoading(false);
   }
 
   render() {
-    const { imageSrc, isLoading } = this.props;
+    const { imageSrc } = this.props;
     if (imageSrc) {
       return (
         <div>
           <button className="button" onClick={() => this.share()}>​ Share</button>
           <button className="button" onClick={() => this.generate()}>Generate Mosaic</button>
-          {isLoading && <div>Loading</div>}
-          <canvas style={{ visibility: isLoading ? 'hidden' : 'visible' }} ref={(canvas) => this.canvas = canvas}/>
+          <canvas ref={(canvas) => this.canvas = canvas}/>
         </div>
       );
     } else {

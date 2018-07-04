@@ -1,4 +1,4 @@
-import { SET_PREVIEW_IMAGE_SRC, GENERATE_MOSAIC, SHARE_IMAGE, SET_SHARED_IMAGE, SET_IS_LOADING } from './constants';
+import { SET_PREVIEW_IMAGE_SRC, SHARE_IMAGE, SET_SHARED_IMAGE, SET_IS_LOADING } from './constants';
 import { Image } from '../../types';
 
 export type SetPreviewImageSrcAction = (previewImageSrc: string) => SetPreviewImageSrcActionResponse;
@@ -10,17 +10,6 @@ export type SetPreviewImageSrcActionResponse = {
 export const setPreviewImageSrcAction: SetPreviewImageSrcAction = (previewImageSrc: string) => ({
   type: SET_PREVIEW_IMAGE_SRC,
   previewImageSrc,
-});
-
-export type GenerateMosaicAction = (imageData: ImageData) => GenerateMosaicActionResponse;
-export type GenerateMosaicActionResponse = {
-  type: GENERATE_MOSAIC,
-  imageData: ImageData,
-};
-
-export const generateMosaicAction: GenerateMosaicAction = (imageData: ImageData) => ({
-  type: GENERATE_MOSAIC,
-  imageData,
 });
 
 export type ShareImageAction = (base64Image: string) => ShareImageActionResponse;
@@ -56,4 +45,4 @@ export const setIsLoadingAction: SetIsLoadingAction = (isLoading: boolean) => ({
   isLoading,
 });
 
-export type Action = SetPreviewImageSrcActionResponse | GenerateMosaicActionResponse | ShareImageActionResponse | SetSharedImageActionResponse | SetIsLoadingActionResponse;
+export type Action = SetPreviewImageSrcActionResponse | ShareImageActionResponse | SetSharedImageActionResponse | SetIsLoadingActionResponse;
