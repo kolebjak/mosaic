@@ -1,28 +1,28 @@
-import { Image, Mosaic, OriginalImage, State } from '../../types';
+import { Image, State } from '../../types';
 import { Action } from './actions';
-import { SET_ORIGINAL_IMAGE, SET_MOSAIC, SET_SHARED_IMAGE } from './constants';
+import { SET_PREVIEW_IMAGE_SRC, SET_SHARED_IMAGE, SET_IS_LOADING } from './constants';
 
 export type Reducer = {
-  originalImage?: OriginalImage,
-  mosaic?: Mosaic,
+  previewImageSrc?: string,
+  isLoading: boolean,
   sharedImage?: Image,
 };
 
 const initialState: Reducer = {
-  originalImage: undefined,
-  mosaic: undefined,
+  previewImageSrc: undefined,
+  isLoading: false,
   sharedImage: undefined,
 };
 
 export default (state = initialState, action: Action) => {
   switch (action.type) {
-    case SET_ORIGINAL_IMAGE: {
-      const { originalImage } = action;
-      return {...state, originalImage, mosaic: undefined, sharedImage: undefined };
+    case SET_PREVIEW_IMAGE_SRC: {
+      const { previewImageSrc } = action;
+      return {...state, previewImageSrc, sharedImage: undefined };
     }
-    case SET_MOSAIC: {
-      const { mosaic } = action;
-      return {...state, mosaic };
+    case SET_IS_LOADING: {
+      const { isLoading } = action;
+      return {...state, isLoading };
     }
     case SET_SHARED_IMAGE: {
       const { sharedImage } = action;
@@ -33,6 +33,6 @@ export default (state = initialState, action: Action) => {
   }
 };
 
-export const selectOriginalImage = (state: State) => state.previewReducer.originalImage;
-export const selectMosaic = (state: State) => state.previewReducer.mosaic;
+export const selectPreviewImageSrc = (state: State) => state.previewReducer.previewImageSrc;
 export const selectSharedImage = (state: State) => state.previewReducer.sharedImage;
+export const selectIsLoading = (state: State) => state.previewReducer.isLoading;

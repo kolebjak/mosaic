@@ -8,10 +8,10 @@ export type State = {
   galleryReducer: GalleryReducer,
 };
 
-export type OriginalImage = {
-  source: string,
-  file?: File,
-};
+// export type OriginalImage = {
+//   source: string,
+//   file?: File,
+// };
 
 export type MosaicData = Array<Array<{
   red: number;

@@ -1,41 +1,26 @@
-import { SET_ORIGINAL_IMAGE, SET_MOSAIC, GENERATE_MOSAIC, SHARE_IMAGE, SET_SHARED_IMAGE } from './constants';
-import { Image, Mosaic, OriginalImage } from '../../types';
+import { SET_PREVIEW_IMAGE_SRC, GENERATE_MOSAIC, SHARE_IMAGE, SET_SHARED_IMAGE, SET_IS_LOADING } from './constants';
+import { Image } from '../../types';
 
-export type SetOriginalImageAction = (originalImage: OriginalImage) => SetOriginalImageActionResponse;
-export type SetOriginalImageActionResponse = {
-  type: SET_ORIGINAL_IMAGE,
-  originalImage: OriginalImage,
+export type SetPreviewImageSrcAction = (previewImageSrc: string) => SetPreviewImageSrcActionResponse;
+export type SetPreviewImageSrcActionResponse = {
+  type: SET_PREVIEW_IMAGE_SRC,
+  previewImageSrc: string,
 };
 
-export const setOriginalImageAction: SetOriginalImageAction = (originalImage: OriginalImage) => ({
-  type: SET_ORIGINAL_IMAGE,
-  originalImage,
+export const setPreviewImageSrcAction: SetPreviewImageSrcAction = (previewImageSrc: string) => ({
+  type: SET_PREVIEW_IMAGE_SRC,
+  previewImageSrc,
 });
 
-export type SetMosaicAction = (mosaic: Mosaic) => SetMosaicActionResponse;
-export type SetMosaicActionResponse = {
-  type: SET_MOSAIC,
-  mosaic: Mosaic,
-};
-
-export const setMosaicAction: SetMosaicAction = (mosaic: Mosaic) => ({
-  type: SET_MOSAIC,
-  mosaic,
-});
-
-export type GenerateMosaicAction = (imageData: ImageData, width: number, height: number) => GenerateMosaicActionResponse;
+export type GenerateMosaicAction = (imageData: ImageData) => GenerateMosaicActionResponse;
 export type GenerateMosaicActionResponse = {
   type: GENERATE_MOSAIC,
   imageData: ImageData,
-  width: number,
-  height: number,
 };
 
-export const generateMosaicAction: GenerateMosaicAction = (imageData: ImageData, width: number, height: number) => ({
+export const generateMosaicAction: GenerateMosaicAction = (imageData: ImageData) => ({
   type: GENERATE_MOSAIC,
   imageData,
-  width,
-  height,
 });
 
 export type ShareImageAction = (base64Image: string) => ShareImageActionResponse;
@@ -60,4 +45,15 @@ export const setSharedImageAction: SetSharedImageAction = (sharedImage: Image) =
   sharedImage,
 });
 
-export type Action = SetOriginalImageActionResponse | SetMosaicActionResponse | GenerateMosaicActionResponse | ShareImageActionResponse | SetSharedImageActionResponse;
+export type SetIsLoadingAction = (isLoading: boolean) => SetIsLoadingActionResponse;
+export type SetIsLoadingActionResponse = {
+  type: SET_IS_LOADING,
+  isLoading: boolean,
+};
+
+export const setIsLoadingAction: SetIsLoadingAction = (isLoading: boolean) => ({
+  type: SET_IS_LOADING,
+  isLoading,
+});
+
+export type Action = SetPreviewImageSrcActionResponse | GenerateMosaicActionResponse | ShareImageActionResponse | SetSharedImageActionResponse | SetIsLoadingActionResponse;

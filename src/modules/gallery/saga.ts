@@ -4,10 +4,10 @@ import { fetchGallery } from '../fetcher/';
 import { FETCH_GALLERY, SELECT_IMAGE } from './constants';
 import { SelectImageActionResponse, setGalleryAction } from './actions';
 import { isResponseSuccessfull } from '../utils';
-import { Image, OriginalImage } from '../../types';
+import { Image } from '../../types';
 import { Routes } from '../routes';
-import { setOriginalImageAction } from '../preview/actions';
 import { push } from 'react-router-redux';
+import { setPreviewImageSrcAction } from '../preview/actions';
 
 function* fetch(): SagaIterator {
   try {
@@ -26,8 +26,7 @@ function* fetch(): SagaIterator {
 
 function* selectImage(action: SelectImageActionResponse): SagaIterator {
   try {
-    const originalImage: OriginalImage = { source: action.imageUrl };
-    yield put(setOriginalImageAction(originalImage));
+    yield put(setPreviewImageSrcAction(action.imageUrl));
     yield put(push(Routes.preview));
   } catch (e) {
     console.error(e.message);
