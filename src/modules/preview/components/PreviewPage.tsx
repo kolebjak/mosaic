@@ -18,7 +18,7 @@ export type Props = {
 };
 
 /**
- * Component for displaying Uploaded image / Mosaic
+ * Component for displaying images, wrapper for <Canvas />
  */
 class PreviewPage extends React.Component<Props> {
 

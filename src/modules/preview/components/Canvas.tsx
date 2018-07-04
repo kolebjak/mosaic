@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { getAverageColor } from '../../utils';
+import { getAverageColor, loadImage } from '../../utils';
+
+const CIRCLE_SIZE = 16;
+const CIRCLE_AREA = Math.pow(CIRCLE_SIZE, 2);
 
 export type Props = {
   imageSrc: string,
@@ -7,6 +10,9 @@ export type Props = {
   onShare: (dataURL: string) => void,
 };
 
+/**
+ * HTML canvas component that can transform image into mosaic
+ */
 class Canvas extends React.Component<Props> {
   private canvas: HTMLCanvasElement | null;
 
@@ -23,22 +29,13 @@ class Canvas extends React.Component<Props> {
     }
   }
 
-  loadImage = async (imageSrc: string) => new Promise((resolve) => {
-    const image = new Image();
-    image.crossOrigin = 'Anonymous';
-    image.src = imageSrc;
-    image.onload = () => {
-      resolve(image);
-    };
-  })
-
   /** Setting image from source to canvas */
   setImageIntoCanvas = (imageSrc: string) => {
     if (this.canvas) {
       const context = this.canvas.getContext('2d');
       if (context) {
         this.props.setIsLoading(true);
-        this.loadImage(imageSrc).then((image: HTMLImageElement) => {
+        loadImage(imageSrc).then((image: HTMLImageElement) => {
           if (this.canvas) {
             this.canvas.width = image.width;
             this.canvas.height = image.height;
@@ -64,30 +61,33 @@ class Canvas extends React.Component<Props> {
 
     let sx = 0;
     let row = 0;
-    let radius = 16;
-    let imageData = context.getImageData(sx, row * radius, radius, radius);
+    let imageData = context.getImageData(sx, row * CIRCLE_SIZE, CIRCLE_SIZE, CIRCLE_SIZE);
 
-    while (Math.floor(height / radius) >= row) {
+    while (Math.floor(height / CIRCLE_SIZE) >= row) {
 
+      /** Compute average color */
       const avg = getAverageColor(imageData);
-      const clearedSquare = context.createImageData(radius, radius);
-      context.putImageData(clearedSquare, sx, row * radius);
-
+      /** Clear original image */
+      const clearedSquare = context.createImageData(CIRCLE_SIZE, CIRCLE_SIZE);
+      context.putImageData(clearedSquare, sx, row * CIRCLE_SIZE);
+      /** Draw circle with average color */
       context.beginPath();
-      context.arc(sx, row * radius, radius / 2, 0, 2 * Math.PI, false);
-      context.fillStyle = avg;
+      context.arc(sx, row * CIRCLE_SIZE, CIRCLE_SIZE / 2, 0, 2 * Math.PI, false);
+      context.fillStyle = `rgb(${avg.red / CIRCLE_AREA}, ${avg.green / CIRCLE_AREA}, ${avg.blue / CIRCLE_AREA})`;
       context.fill();
 
-      sx += radius;
+      sx += CIRCLE_SIZE;
       if (sx >= width) {
         sx = 0;
         row += 1;
       }
-      imageData = context.getImageData(sx, row * radius, radius, radius);
+      /** Get another 16x16px square */
+      imageData = context.getImageData(sx, row * CIRCLE_SIZE, CIRCLE_SIZE, CIRCLE_SIZE);
     }
     resolve();
   })
 
+  /** Share image to imgur */
   share = () => {
     if (this.canvas) {
       const base64Image = this.canvas.toDataURL().replace('data:image/png;base64,', '');
@@ -95,6 +95,7 @@ class Canvas extends React.Component<Props> {
     }
   }
 
+  /** Generate mosaic from original image */
   generate = async () => {
     this.props.setIsLoading(true);
     await this.setMosaicToCanvas();

@@ -1,13 +1,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Gallery, State } from '../../../types';
-import { selectGallery } from '../reducer';
-import { FetchGalleryAction, fetchGalleryAction, SelectImageAction, selectImageAction } from '../actions';
+import { selectGallery, selectPage } from '../reducer';
+import {
+  FetchGalleryAction,
+  fetchGalleryAction,
+  SelectImageAction,
+  selectImageAction, SetPageAction,
+  setPageAction
+} from '../actions';
 
 export type Props = {
   gallery: Gallery,
   fetchGallery: FetchGalleryAction,
   selectImage: SelectImageAction,
+  setPage: SetPageAction,
+  page: number,
 };
 
 class GalleryPage extends React.Component<Props> {
@@ -16,7 +24,7 @@ class GalleryPage extends React.Component<Props> {
   }
 
   render() {
-    const { gallery, selectImage } = this.props;
+    const { gallery, selectImage, setPage, page } = this.props;
     return (
       <div>
         <h1>Click on your favourite picture</h1>
@@ -32,7 +40,9 @@ class GalleryPage extends React.Component<Props> {
           ))}
         </div>
         <div>
-          Previous Next
+          <button onClick={() => setPage(page - 1)}>Previous</button>
+          <span>{page}</span>
+          <button onClick={() => setPage(page + 1)}>Next</button>
         </div>
       </div>
     );
@@ -42,9 +52,11 @@ class GalleryPage extends React.Component<Props> {
 export default connect(
   (state: State) => ({
     gallery: selectGallery(state),
+    page: selectPage(state),
   }),
   {
     fetchGallery: fetchGalleryAction,
     selectImage: selectImageAction,
+    setPage: setPageAction,
   }
 )(GalleryPage);

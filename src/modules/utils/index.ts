@@ -21,6 +21,7 @@ export const readAsDataURL = (file: File) => {
   });
 };
 
+/** Get average color of image */
 export const getAverageColor = (imageData: ImageData) => {
   const data = imageData.data;
   const rgb = { red: 0, green: 0, blue: 0 };
@@ -29,5 +30,14 @@ export const getAverageColor = (imageData: ImageData) => {
     rgb.green += data[i + 1];
     rgb.blue += data[i + 2];
   }
-  return `rgb(${rgb.red / 256}, ${rgb.green / 256}, ${rgb.blue / 256})`;
+  return rgb;
 };
+
+export const loadImage = async (imageSrc: string) => new Promise((resolve) => {
+  const image = new Image();
+  image.crossOrigin = 'Anonymous';
+  image.src = imageSrc;
+  image.onload = () => {
+    resolve(image);
+  };
+});
