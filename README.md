@@ -18,6 +18,7 @@
 ## ​Areas​ ​for​ ​improvement 
 * Variable mosaic circle radius
 * Variable imgur gallery
+* Better error handling in Sagas than just console.error
 * Loaders / spinners if something takes long
 * Resizing images
 * More tests
