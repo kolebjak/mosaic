@@ -9,7 +9,7 @@ import {
 import { postImage } from '../fetcher';
 import { isResponseSuccessfull } from '../utils';
 
-function* shareImage(action: ShareImageActionResponse): SagaIterator {
+export function* shareImage(action: ShareImageActionResponse): SagaIterator {
   try {
     yield put(setIsLoadingAction(true));
     const response = yield call(postImage, action.base64Image);

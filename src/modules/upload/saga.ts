@@ -7,7 +7,7 @@ import { setPreviewImageSrcAction } from '../preview/actions';
 import { push } from 'react-router-redux';
 import { Routes } from '../routes';
 
-function* uploadImage(action: UploadImageActionResponse): SagaIterator {
+export function* uploadImage(action: UploadImageActionResponse): SagaIterator {
   try {
     const { image } = action;
     const result = yield call(readAsDataURL, image);

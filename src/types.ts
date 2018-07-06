@@ -8,23 +8,6 @@ export type State = {
   galleryReducer: GalleryReducer,
 };
 
-// export type OriginalImage = {
-//   source: string,
-//   file?: File,
-// };
-
-export type MosaicData = Array<Array<{
-  red: number;
-  green: number;
-  blue: number;
-}>>;
-
-export type Mosaic = {
-  data: MosaicData,
-  width: number,
-  height: number,
-};
-
 export type Image = {
   id: string,
   link: string,

@@ -30,10 +30,15 @@ export const getAverageColor = (imageData: ImageData) => {
     rgb.green += data[i + 1];
     rgb.blue += data[i + 2];
   }
-  return rgb;
+  const resolution = imageData.width * imageData.height;
+  return {
+    red: rgb.red / resolution,
+    green: rgb.green / resolution,
+    blue: rgb.blue / resolution,
+  };
 };
 
-export const loadImage = async (imageSrc: string) => new Promise((resolve) => {
+export const loadImage = async (imageSrc: string) => new Promise<HTMLImageElement>((resolve) => {
   const image = new Image();
   image.crossOrigin = 'Anonymous';
   image.src = imageSrc;

@@ -9,6 +9,7 @@ import {
   selectImageAction, SetPageAction,
   setPageAction
 } from '../actions';
+import Image from './Image';
 
 export type Props = {
   gallery: Gallery,
@@ -18,29 +19,28 @@ export type Props = {
   page: number,
 };
 
-class GalleryPage extends React.Component<Props> {
+export class GalleryPage extends React.Component<Props> {
   componentDidMount() {
     this.props.fetchGallery();
   }
 
   render() {
-    const { gallery, selectImage, setPage, page } = this.props;
+    const { gallery, setPage, page, selectImage } = this.props;
     return (
       <div>
         <h1>Click on your favourite picture</h1>
         <div>
           {gallery.map(image => (
-            <img
+            <Image
               className="galleryImage"
               key={image.id}
               src={image.link}
-              width={200}
               onClick={() => selectImage(image.link)}
             />
           ))}
         </div>
         <div>
-          <button onClick={() => setPage(page - 1)}>Previous</button>
+          <button disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</button>
           <span>{page}</span>
           <button onClick={() => setPage(page + 1)}>Next</button>
         </div>
