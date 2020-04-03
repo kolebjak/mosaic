@@ -12,7 +12,7 @@ import {
 import { isResponseSuccessfull } from '../utils';
 import { Image } from '../../types';
 import { Routes } from '../routes';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { setPreviewImageSrcAction } from '../preview/actions';
 import { selectGallerySize, selectLastLoadedPageNumber, selectPageSize } from './reducer';
 

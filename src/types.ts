@@ -1,9 +1,9 @@
-import { RouterState } from 'react-router-redux';
+import { RouterState } from 'connected-react-router';
 import { Reducer as PreviewReducer } from './modules/preview/reducer';
 import { Reducer as GalleryReducer } from './modules/gallery/reducer';
 
 export type State = {
-  routerReducer: RouterState,
+  router: RouterState,
   previewReducer: PreviewReducer,
   galleryReducer: GalleryReducer,
 };

@@ -2,6 +2,7 @@ import { testSaga } from 'redux-saga-test-plan';
 import { shareImage } from '../saga';
 import { setIsLoadingAction, setSharedImageAction } from '../actions';
 import { postImage } from '../../fetcher';
+import { SHARE_IMAGE } from '../constants';
 
 const data = {
   id: '1',
@@ -11,7 +12,7 @@ const data = {
 
 describe('Preview page sagas', () => {
   it('shareImage', () => {
-    testSaga(shareImage, { base64Image: 'base64Image' })
+    testSaga(shareImage, { type: SHARE_IMAGE, base64Image: 'base64Image' })
       .next()
       .put(setIsLoadingAction(true))
       .next()

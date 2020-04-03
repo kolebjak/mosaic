@@ -4,7 +4,7 @@ import { UPLOAD_IMAGE } from './constants';
 import { UploadImageActionResponse } from './actions';
 import { readAsDataURL } from '../utils';
 import { setPreviewImageSrcAction } from '../preview/actions';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Routes } from '../routes';
 
 export function* uploadImage(action: UploadImageActionResponse): SagaIterator {

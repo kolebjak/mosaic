@@ -1,8 +1,7 @@
-import { createStore, applyMiddleware, compose, combineReducers, Reducer } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
-import { State } from './types';
 import previewReducer from './modules/preview/reducer';
 import galleryReducer from './modules/gallery/reducer';
 
@@ -10,8 +9,8 @@ import galleryReducer from './modules/gallery/reducer';
 declare const window: any;
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const rootReducer: Reducer<State> = combineReducers({
-  routerReducer,
+const rootReducer = (history: History) => combineReducers({
+  router: connectRouter(history),
   previewReducer,
   galleryReducer,
 });
@@ -20,7 +19,7 @@ export default (history: History) => {
   const router = routerMiddleware(history);
   return {
     ...createStore(
-      rootReducer,
+      rootReducer(history),
       composeEnhancers(
         applyMiddleware(sagaMiddleware),
         applyMiddleware(router),
