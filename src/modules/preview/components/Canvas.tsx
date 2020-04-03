@@ -19,7 +19,7 @@ export type Props = {
  * HTML canvas component that can transform image into mosaic
  */
 class Canvas extends React.Component<Props> {
-  private canvas: HTMLCanvasElement | null;
+  private canvas: HTMLCanvasElement | null = null;
 
   async componentDidMount() {
     const { previewImageSrc } = this.props;
@@ -138,4 +138,5 @@ export default connect(
     shareImage: shareImageAction,
     setIsLoading: setIsLoadingAction,
   }
+// @ts-ignore
 )(Canvas);

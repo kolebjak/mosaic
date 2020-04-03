@@ -1,6 +1,6 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { fetchGallery } from '../fetcher/';
+import { fetchGallery } from '../fetcher';
 import { FETCH_GALLERY, SELECT_IMAGE, SET_PAGE } from './constants';
 import {
   fetchGalleryAction,
