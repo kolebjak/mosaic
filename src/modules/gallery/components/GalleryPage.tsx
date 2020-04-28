@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Gallery, State } from '../../../types';
-import { selectGallery, selectPage } from '../reducer';
+import {connect} from 'react-redux';
+import {Gallery, State} from '../../../types';
+import {selectGallery, selectGalleryIsLoading, selectPage} from '../reducer';
 import {
   FetchGalleryAction,
   fetchGalleryAction,
@@ -10,6 +10,7 @@ import {
   setPageAction
 } from '../actions';
 import Image from './Image';
+import {List} from "antd";
 
 export type Props = {
   gallery: Gallery,
@@ -17,6 +18,7 @@ export type Props = {
   selectImage: SelectImageAction,
   setPage: SetPageAction,
   page: number,
+  isLoading: boolean,
 };
 
 export class GalleryPage extends React.Component<Props> {
@@ -25,20 +27,33 @@ export class GalleryPage extends React.Component<Props> {
   }
 
   render() {
-    const { gallery, setPage, page, selectImage } = this.props;
+    const {gallery, setPage, page, selectImage, isLoading} = this.props;
+
     return (
       <div>
         <h1>Click on your favourite picture</h1>
-        <div>
-          {gallery.map(image => (
-            <Image
-              className="galleryImage"
-              key={image.id}
-              src={image.link}
-              onClick={() => selectImage(image.link)}
-            />
-          ))}
-        </div>
+        <List
+          loading={isLoading}
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 4,
+            lg: 4,
+            xl: 6,
+            xxl: 3,
+          }}
+          dataSource={gallery}
+          renderItem={image => (
+            <List.Item>
+              <Image
+                key={image.id}
+                src={image.link}
+                onClick={() => selectImage(image.link)}
+              />
+            </List.Item>
+          )}
+        />
         <div>
           <button disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</button>
           <span>{page}</span>
@@ -53,6 +68,7 @@ export default connect(
   (state: State) => ({
     gallery: selectGallery(state),
     page: selectPage(state),
+    isLoading: selectGalleryIsLoading(state),
   }),
   {
     fetchGallery: fetchGalleryAction,

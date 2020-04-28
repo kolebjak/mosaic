@@ -1,4 +1,11 @@
-import { SET_PAGE, FETCH_GALLERY, SELECT_IMAGE, SET_GALLERY, SET_LAST_LOADED_PAGE } from './constants';
+import {
+  SET_PAGE,
+  FETCH_GALLERY,
+  SELECT_IMAGE,
+  SET_GALLERY,
+  SET_LAST_LOADED_PAGE,
+  SET_GALLERY_IS_LOADING
+} from './constants';
 
 export type SetGalleryAction = (gallery: object[]) => SetGalleryActionResponse;
 export type SetGalleryActionResponse = {
@@ -6,7 +13,7 @@ export type SetGalleryActionResponse = {
   gallery: object[],
 };
 
-export const setGalleryAction: SetGalleryAction = (gallery: object[]) => ({
+export const setGalleryAction: SetGalleryAction = (gallery) => ({
   type: SET_GALLERY,
   gallery,
 });
@@ -26,7 +33,7 @@ export type SelectImageActionResponse = {
   imageUrl: string,
 };
 
-export const selectImageAction: SelectImageAction = (imageUrl: string) => ({
+export const selectImageAction: SelectImageAction = (imageUrl) => ({
   type: SELECT_IMAGE,
   imageUrl,
 });
@@ -37,7 +44,7 @@ export type SetPageActionResponse = {
   page: number,
 };
 
-export const setPageAction: SetPageAction = (page: number) => ({
+export const setPageAction: SetPageAction = (page) => ({
   type: SET_PAGE,
   page,
 });
@@ -48,9 +55,21 @@ export type SetLastLoadedPageNumberActionResponse = {
   lastLoadedPageNumber: number,
 };
 
-export const setLastLoadedPageNumberAction: SetLastLoadedPageNumberAction = (lastLoadedPageNumber: number) => ({
+export const setLastLoadedPageNumberAction: SetLastLoadedPageNumberAction = (lastLoadedPageNumber) => ({
   type: SET_LAST_LOADED_PAGE,
   lastLoadedPageNumber,
 });
 
-export type Action = SetGalleryActionResponse | FetchGalleryActionResponse | SelectImageActionResponse | SetPageActionResponse | SetLastLoadedPageNumberActionResponse;
+export type SetGalleryIsLoadingAction = (isLoading: boolean) => SetGalleryIsLoadingActionResponse;
+export type SetGalleryIsLoadingActionResponse = {
+  type: SET_GALLERY_IS_LOADING,
+  isLoading: boolean,
+};
+
+export const setGalleryIsLoadingAction: SetGalleryIsLoadingAction = (isLoading) => ({
+  type: SET_GALLERY_IS_LOADING,
+  isLoading,
+});
+
+
+export type Action = SetGalleryActionResponse | FetchGalleryActionResponse | SelectImageActionResponse | SetPageActionResponse | SetLastLoadedPageNumberActionResponse | SetGalleryIsLoadingActionResponse;

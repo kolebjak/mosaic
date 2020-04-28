@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { spy } from 'sinon';
 import { mount } from 'enzyme';
 import Image from '../Image';
 
@@ -11,11 +10,11 @@ describe('<Image />', () => {
     expect(wrapper.find(Image).length).toEqual(1);
   });
   it('click on image', () => {
-    const onClick = spy();
+    const onClick = jest.fn();
     const wrapper = mount(
       <Image src="http://" onClick={onClick}/>
     );
     wrapper.find('img').simulate('click');
-    expect(onClick.calledOnce).toEqual(true);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
