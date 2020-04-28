@@ -20,7 +20,7 @@ export default () => (
         <Link to={Routes.upload}>Upload</Link>
       </Menu.Item>
     </Menu>
-    <div className="page">
+    <div>
       <Switch>
         <Route exact={true} path={Routes.home} component={HomePage}/>
         <Route path={Routes.selectImage} component={GalleryPage}/>
