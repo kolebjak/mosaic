@@ -12,7 +12,7 @@ import { appMountedAction } from './modules/app/actions';
 import 'antd/dist/antd.css';
 import './index.css';
 
-const history = createHistory();
+const history = createHistory({ basename: '/mosaic/'});
 const store = getStore(history);
 
 store.runSaga(getSaga());
