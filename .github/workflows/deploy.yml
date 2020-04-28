@@ -19,5 +19,5 @@ jobs:
         run: |
           git config --global user.email ${{ secrets.access_github_email }}
           git config --global user.name ${{ secrets.access_github_username }}
-          git remote set-url origin https://${{ secrets.access_token }}@github.com/flsy/react-metaforms.git
+          git remote set-url origin https://${{ secrets.access_token }}@github.com/kolebjak/mosaic.git
           npm run deploy
