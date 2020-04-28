@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { spy } from 'sinon';
 import { mount } from 'enzyme';
 import { GalleryPage } from '../GalleryPage';
 import Image from '../Image';
@@ -23,13 +22,31 @@ const gallery = [
 ];
 
 describe('<GalleryPage />', () => {
+
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+  });
+
   it('renders without crashing', () => {
     const wrapper = mount(
       <GalleryPage
+        isLoading={false}
         gallery={[]}
-        fetchGallery={spy()}
-        selectImage={spy()}
-        setPage={spy()}
+        fetchGallery={jest.fn()}
+        selectImage={jest.fn()}
+        setPage={jest.fn()}
         page={0}
       />
     );
@@ -37,26 +54,28 @@ describe('<GalleryPage />', () => {
   });
 
   it('fetch gallery on mount', () => {
-    const fetchGallery = spy();
+    const fetchGallery = jest.fn();
     mount(
       <GalleryPage
+        isLoading={false}
         gallery={[]}
         fetchGallery={fetchGallery}
-        selectImage={spy()}
-        setPage={spy()}
+        selectImage={jest.fn()}
+        setPage={jest.fn()}
         page={0}
       />
     );
-    expect(fetchGallery.calledOnce).toEqual(true);
+    expect(fetchGallery).toHaveBeenCalledTimes(1);
   });
 
   it('displays images', () => {
     const wrapper = mount(
       <GalleryPage
+        isLoading={false}
         gallery={gallery}
-        fetchGallery={spy()}
-        selectImage={spy()}
-        setPage={spy()}
+        fetchGallery={jest.fn()}
+        selectImage={jest.fn()}
+        setPage={jest.fn()}
         page={0}
       />
     );
@@ -64,29 +83,31 @@ describe('<GalleryPage />', () => {
   });
 
   it('click on image', () => {
-    const selectImage = spy();
+    const selectImage = jest.fn();
     const wrapper = mount(
       <GalleryPage
+        isLoading={false}
         gallery={gallery}
-        fetchGallery={spy()}
+        fetchGallery={jest.fn()}
         selectImage={selectImage}
-        setPage={spy()}
+        setPage={jest.fn()}
         page={1}
       />
     );
 
     const img = wrapper.find('img').first();
     img.simulate('click');
-    expect(selectImage.calledWith('http://1')).toEqual(true);
+    expect(selectImage).toHaveBeenCalledWith('http://1');
   });
 
   it('click on previous', () => {
-    const setPage = spy();
+    const setPage = jest.fn();
     const wrapper = mount(
       <GalleryPage
+        isLoading={false}
         gallery={gallery}
-        fetchGallery={spy()}
-        selectImage={spy()}
+        fetchGallery={jest.fn()}
+        selectImage={jest.fn()}
         setPage={setPage}
         page={2}
       />
@@ -94,16 +115,17 @@ describe('<GalleryPage />', () => {
 
     const btn = wrapper.find('button').first();
     btn.simulate('click');
-    expect(setPage.calledOnce).toEqual(true);
+    expect(setPage).toHaveBeenCalledTimes(1);
   });
 
   it('click on previous when on first page', () => {
-    const setPage = spy();
+    const setPage = jest.fn();
     const wrapper = mount(
       <GalleryPage
+        isLoading={false}
         gallery={gallery}
-        fetchGallery={spy()}
-        selectImage={spy()}
+        fetchGallery={jest.fn()}
+        selectImage={jest.fn()}
         setPage={setPage}
         page={1}
       />
@@ -111,6 +133,6 @@ describe('<GalleryPage />', () => {
 
     const btn = wrapper.find('button').first();
     btn.simulate('click');
-    expect(setPage.calledOnce).toEqual(false);
+    expect(setPage).not.toHaveBeenCalled();
   });
 });

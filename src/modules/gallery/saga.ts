@@ -5,7 +5,7 @@ import { FETCH_GALLERY, SELECT_IMAGE, SET_PAGE } from './constants';
 import {
   fetchGalleryAction,
   SelectImageActionResponse,
-  setGalleryAction,
+  setGalleryAction, setGalleryIsLoadingAction,
   setLastLoadedPageNumberAction,
   SetPageActionResponse
 } from './actions';
@@ -18,6 +18,7 @@ import { selectGallerySize, selectLastLoadedPageNumber, selectPageSize } from '.
 
 function* fetch(): SagaIterator {
   try {
+    yield put(setGalleryIsLoadingAction(true))
     /** fetch gallery */
     const lastLoadedPage = yield select(selectLastLoadedPageNumber);
     const currentPage = lastLoadedPage + 1;
@@ -29,6 +30,7 @@ function* fetch(): SagaIterator {
       const gallery = response.data.filter((image: Image) => !image.animated);
       /** set to state */
       yield put(setGalleryAction(gallery));
+      yield put(setGalleryIsLoadingAction(false))
     }
   } catch (e) {
     console.error(e.message);

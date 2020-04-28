@@ -1,5 +1,6 @@
-import * as React from 'react';
-import classNames from 'classnames';
+import React from 'react';
+import {useState} from "react";
+import {Spin} from "antd";
 
 export type Props = {
   src: string,
@@ -7,35 +8,25 @@ export type Props = {
   onClick?: () => void,
 };
 
-export type State = {
-  isLoading: boolean,
-};
+const Image = ({src, onClick}: Props) => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-class Image extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { isLoading: true };
+  const onLoad = () => {
+    setIsLoading(false)
   }
 
-  onLoad = () => {
-    this.setState({ isLoading: false });
-  }
-
-  render() {
-    const { isLoading } = this.state;
-    const { className, onClick } = this.props;
-    return (
-      <span>
-        {isLoading && <span>Loading</span>}
+  return (
+    <Spin spinning={isLoading}>
+      <div style={{overflow: "hidden", width: '200px', height: '200px'}} onClick={onClick}>
         <img
-          className={classNames('image', className, { isLoading })}
-          src={this.props.src}
-          onLoad={this.onLoad}
-          onClick={onClick}
+          width="100%"
+          alt=""
+          src={src}
+          onLoad={onLoad}
         />
-      </span>
-    );
-  }
+      </div>
+    </Spin>
+  );
 }
 
 export default Image;
